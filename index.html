@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AQX Freight Calculator CLI & Landed Cost Portal (2026)</title>
+  <meta name="description" content="Calculate international air freight rates, volumetric weight, and 0% sales tax locker savings from USA to Saudi Arabia, UAE, Germany, UK, Australia, and 15 global destinations.">
+  <link rel="canonical" href="https://aqxlogistics.github.io/aqx-freight-calculator-cli/">
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --accent: #f97316;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    header { text-align: center; margin-bottom: 2.5rem; }
+    h1 { font-size: 2.25rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; }
+    .badge { display: inline-block; background: var(--accent); color: #fff; font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 9999px; margin-bottom: 1rem; }
+    p.lead { font-size: 1.15rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+    label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: #e2e8f0; }
+    input, select { width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 1rem; }
+    input:focus, select:focus { outline: none; border-color: var(--primary); ring: 2px var(--primary); }
+    .btn { display: inline-block; width: 100%; background: var(--primary); color: #fff; font-size: 1.1rem; font-weight: 700; padding: 0.85rem; border: none; border-radius: 6px; cursor: pointer; text-align: center; text-decoration: none; transition: background 0.2s; margin-top: 1rem; }
+    .btn:hover { background: var(--primary-dark); }
+    .btn-orange { background: var(--accent); }
+    .btn-orange:hover { background: #ea580c; }
+    .results { margin-top: 1.5rem; padding: 1.25rem; background: #0b1329; border: 1px solid var(--primary); border-radius: 8px; }
+    .res-row { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid #1e293b; }
+    .res-row:last-child { border-bottom: none; }
+    .res-label { color: var(--text-muted); }
+    .res-val { font-weight: 700; color: #38bdf8; }
+    .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .pillar-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; }
+    .pillar-card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: #fff; }
+    .pillar-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+    .pillar-card a { color: #38bdf8; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .pillar-card a:hover { text-decoration: underline; }
+    footer { text-align: center; margin-top: 3rem; font-size: 0.9rem; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 1.5rem; }
+    footer a { color: #38bdf8; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">OFFICIAL CLI & WEB ENGINE 2026</span>
+      <h1>AQX Freight Calculator CLI & Portal</h1>
+      <p class="lead">Precision landed cost computation for US air cargo shipping to Saudi Arabia, UAE, Germany, UK, Australia, and 15 global trade corridors.</p>
+    </header>
+
+    <div class="card">
+      <h2 style="font-size: 1.4rem; margin-bottom: 1.25rem;">Live Shipping Rate & Volume Calculator</h2>
+      <div class="grid">
+        <div>
+          <label for="destination">Target Destination</label>
+          <select id="destination">
+            <option value="saudi-arabia">Saudi Arabia 🇸🇦 (RUH / JED / DMM)</option>
+            <option value="united-arab-emirates">United Arab Emirates 🇦🇪 (DXB / AUH)</option>
+            <option value="germany">Germany 🇩🇪 (FRA / MUC / BER)</option>
+            <option value="united-kingdom">United Kingdom 🇬🇧 (LHR / MAN)</option>
+            <option value="australia">Australia 🇦🇺 (SYD / MEL / PER)</option>
+            <option value="kuwait">Kuwait 🇰🇼 (KWI)</option>
+            <option value="bahrain">Bahrain 🇧🇭 (BAH)</option>
+            <option value="qatar">Qatar 🇶🇦 (DOH)</option>
+            <option value="oman">Oman 🇴🇲 (MCT)</option>
+            <option value="france">France 🇫🇷 (CDG / ORY)</option>
+            <option value="spain">Spain 🇪🇸 (MAD / BCN)</option>
+            <option value="netherlands">Netherlands 🇳🇱 (AMS)</option>
+            <option value="sweden">Sweden 🇸🇪 (ARN)</option>
+            <option value="portugal">Portugal 🇵🇹 (LIS)</option>
+            <option value="new-zealand">New Zealand 🇳🇿 (AKL)</option>
+          </select>
+        </div>
+        <div>
+          <label for="weight">Actual Weight (kg)</label>
+          <input type="number" id="weight" value="12.0" step="0.5" min="0.5">
+        </div>
+        <div>
+          <label for="dimensions">Dimensions (L x W x H in cm)</label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="number" id="length" value="50" placeholder="L">
+            <input type="number" id="width" value="40" placeholder="W">
+            <input type="number" id="height" value="30" placeholder="H">
+          </div>
+        </div>
+        <div>
+          <label for="itemValue">US Supplier Value (USD) [0% Tax Locker]</label>
+          <input type="number" id="itemValue" value="1500" step="50" min="0">
+        </div>
+      </div>
+      <button class="btn" onclick="calc()">Calculate Live Freight & Tax Savings</button>
+
+      <div class="results" id="resultsBox">
+        <div class="res-row"><span class="res-label">Actual Weight:</span><span class="res-val" id="rActual">12.00 kg</span></div>
+        <div class="res-row"><span class="res-label">IATA Volumetric Weight:</span><span class="res-val" id="rVol">12.00 kg</span></div>
+        <div class="res-row"><span class="res-label">Chargeable Weight:</span><span class="res-val" id="rChargeable">12.00 kg</span></div>
+        <div class="res-row"><span class="res-label">Applicable Rate:</span><span class="res-val" id="rRate">$8.50 / kg (Commercial Tier)</span></div>
+        <div class="res-row"><span class="res-label">Estimated Air Freight:</span><span class="res-val" id="rTotal" style="color: #4ade80; font-size: 1.2rem;">$102.00 USD</span></div>
+        <div class="res-row"><span class="res-label">0% California Sales Tax Saved:</span><span class="res-val" id="rTaxSaved" style="color: #f59e0b; font-size: 1.1rem;">$127.50 USD</span></div>
+      </div>
+      <a href="https://aqxlogistics.com/register" class="btn btn-orange">Claim Your Free 0% Sales Tax California Address Now</a>
+    </div>
+
+    <h2 style="font-size: 1.5rem; margin-top: 2rem;">Authorized Destination Logistics Hubs</h2>
+    <div class="pillars">
+      <div class="pillar-card">
+        <h3>🇸🇦 Saudi Arabia Cargo</h3>
+        <p>Direct air freight to Riyadh, Jeddah & Dammam with 0% US tax locker and DDP clearance.</p>
+        <a href="https://aqxlogistics.com/destinations/saudi-arabia">Explore Saudi Hub &rarr;</a>
+      </div>
+      <div class="pillar-card">
+        <h3>🇦🇪 UAE Cargo</h3>
+        <p>2-4 days express cargo to Dubai & Abu Dhabi for commercial machinery and electronics.</p>
+        <a href="https://aqxlogistics.com/destinations/united-arab-emirates">Explore UAE Hub &rarr;</a>
+      </div>
+      <div class="pillar-card">
+        <h3>🇩🇪 Germany B2B Cargo</h3>
+        <p>Specialized transatlantic air cargo to Frankfurt & Munich for industrial precision tooling.</p>
+        <a href="https://aqxlogistics.com/destinations/germany">Explore Germany Hub &rarr;</a>
+      </div>
+      <div class="pillar-card">
+        <h3>🇬🇧 United Kingdom Cargo</h3>
+        <p>Fast customs clearance into London Heathrow & Manchester with streamlined UK VAT.</p>
+        <a href="https://aqxlogistics.com/destinations/united-kingdom">Explore UK Hub &rarr;</a>
+      </div>
+      <div class="pillar-card">
+        <h3>🇦🇺 Australia Heavy Cargo</h3>
+        <p>Mining wear spares, industrial assemblies and transpacific freight to Perth & Sydney.</p>
+        <a href="https://aqxlogistics.com/destinations/australia">Explore Australia Hub &rarr;</a>
+      </div>
+      <div class="pillar-card">
+        <h3>⚡ Live Freight Calculator</h3>
+        <p>Instant landed cost computation and automated volumetric repacking optimization.</p>
+        <a href="https://aqxlogistics.com/shipping-calculator">Launch Live Calculator &rarr;</a>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 <a href="https://aqxlogistics.com">AQX Logistics</a>. All rights reserved. | <a href="https://aqxlogistics.com/blog">Technical Guides</a> | <a href="https://aqxlogistics.com/register">Free Registration</a></p>
+    </footer>
+  </div>
+
+  <script>
+    function calc() {
+      const w = parseFloat(document.getElementById('weight').value) || 0;
+      const l = parseFloat(document.getElementById('length').value) || 0;
+      const wi = parseFloat(document.getElementById('width').value) || 0;
+      const h = parseFloat(document.getElementById('height').value) || 0;
+      const val = parseFloat(document.getElementById('itemValue').value) || 0;
+
+      const vol = (l * wi * h) / 5000;
+      const chargeable = Math.max(w, vol);
+      const rate = chargeable >= 8.0 ? 8.50 : 15.50;
+      const total = chargeable * rate;
+      const taxSaved = val * 0.085;
+
+      document.getElementById('rActual').innerText = w.toFixed(2) + ' kg';
+      document.getElementById('rVol').innerText = vol.toFixed(2) + ' kg';
+      document.getElementById('rChargeable').innerText = chargeable.toFixed(2) + ' kg';
+      document.getElementById('rRate').innerText = '$' + rate.toFixed(2) + ' / kg (' + (chargeable >= 8.0 ? 'Commercial Tier' : 'Standard Express') + ')';
+      document.getElementById('rTotal').innerText = '$' + total.toFixed(2) + ' USD';
+      document.getElementById('rTaxSaved').innerText = '$' + taxSaved.toFixed(2) + ' USD';
+    }
+  </script>
+</body>
+</html>
